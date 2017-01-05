@@ -33,20 +33,20 @@ void setup() {
 void loop() {
   //hcho, mq135, mq7, h, t, hic, hif
   //HCHO sensor
-  //hcho_value = analogRead(A1);
+  hcho_value = analogRead(A1);
   float vol = hcho_value * 4.95/1023;
-  //Serial.print(vol);
-  //Serial.print(", ");
+  Serial.print(vol);
+  Serial.print(",");
 
   //Mq135 sensor
- //d mq135_value = analogRead(A0);
-  //Serial.print(mq135_value, DEC);
-  //Serial.print(", ");
+  mq135_value = analogRead(A0);
+  Serial.print(mq135_value, DEC);
+  Serial.print(",");
 
   //MQ7 sensor
   MQ7.Power_cycle();
-  // for testing/info
-  //Serial.print(MQ7.Get_current_CO_reading());
+  //for testing/info
+  Serial.print(MQ7.Get_current_CO_reading());
 
   //humidity & tempareture sensor
   h = dht.readHumidity();
@@ -55,7 +55,7 @@ void loop() {
   float hif = dht.computeHeatIndex(f, h);
   float hic = dht.computeHeatIndex(t, h, false);
 
-  //Serial.print(",");
+  Serial.print(",");
   Serial.print(h);
   Serial.print(",");
   Serial.println(t);

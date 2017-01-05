@@ -7,12 +7,12 @@ import paho.mqtt.publish as publish
 import psutil
 
 #serial port setting
-ser = serial.Serial('/dev/cu.usbmodem14241', 9600)
+ser = serial.Serial('/dev/cu.usbmodem1411', 9600)
 smoothing = 100
 
 #thingspeak setting
-channelID = "206998"
-apiKey = "LCDNR6WDV5MIFUUA"
+channelID = "210172"
+apiKey = "VCZEBMUTCTMLAQUT"
 useSSLWebsockets = True
 mqttHost = "mqtt.thingspeak.com"
 import ssl
@@ -28,17 +28,18 @@ with open('airSensorLog.csv','w') as f:
 		writer = csv.writer(f, lineterminator='\n')
 		value = ser.readline()
 		value = value.strip()
-		#(hcho, mq135, humi, temp,)
-		(humi, temp) = value.split(",")
+		#(hcho, mq135, co, humi, temp,)
+		#(humi, temp) = value.split(",")
+		(hcho, mq135, co, humi, temp) = value.split(",")
 		#curl https://api.thingspeak.com/update/ -X POST -d field1=value  -H 'X-THINGSPEAKAPIKEY:LCDNR6WDV5MIFUUA'
-		a = [time, value, humi,temp] 
+		a = [time, value, hcho,mq135,co,humi,temp] 
 		##writer.writerow(a)
 		print(a)
 		#cpuPercent = psutil.cpu_percent(interval=20)
 		#ramPercent = psutil.virtual_memory().percent
 		#print (" CPU =",cpuPercent,"   RAM =",ramPercent)
 		#tPayload = "field1=" + value
-		tPayload = "field3=" + humi  + "&field4=" + temp
+		tPayload = "field1=" + hcho + "&field2=" + mq135 + "&field3=" + co + "&field4=" + humi + "&field5=" + temp 
 		try:
 			publish.single(topic, payload=tPayload, hostname=mqttHost,  transport=tTransport, port=tPort)
 			print ( "success to write")
